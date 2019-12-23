@@ -54,6 +54,8 @@
         <!-- Dependency Versions -->
         <jackson.version>2.10.1</jackson.version>
         <lombok.version>1.18.10</lombok.version>
+        <slf4j.version>1.7.29</slf4j.version>
+        <junit.version>5.5.2</junit.version>
 
         <!-- Plugin Versions -->
         <gitflow.version>1.14.0</gitflow.version>
@@ -72,6 +74,16 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 
