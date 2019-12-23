@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @since 1.0.0
  */
+@Slf4j
 public class InstantTestLinkSerializer extends JsonSerializer<Instant> {
 
     private static final String TEST_LINK_PATTERN = "uuuu-MM-dd HH:mm:ss";
@@ -24,7 +26,10 @@ public class InstantTestLinkSerializer extends JsonSerializer<Instant> {
 
     @Override
     public void serialize(Instant value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeString(getTestLinkValue(value));
+        final String serializedInstant = getTestLinkValue(value);
+        gen.writeString(serializedInstant);
+
+        LOG.trace("Serialized Instant {} as {}", value, serializedInstant);
     }
 
     private String getTestLinkValue(Instant instant) {

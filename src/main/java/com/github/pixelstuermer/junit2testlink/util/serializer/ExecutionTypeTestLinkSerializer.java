@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.pixelstuermer.junit2testlink.data.definition.ExecutionType;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -13,11 +14,15 @@ import java.io.IOException;
  *
  * @since 1.0.0
  */
+@Slf4j
 public class ExecutionTypeTestLinkSerializer extends JsonSerializer<ExecutionType> {
 
     @Override
     public void serialize(ExecutionType value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeString(getTestLinkValue(value));
+        final String serializedExecutionType = getTestLinkValue(value);
+        gen.writeString(serializedExecutionType);
+
+        LOG.trace("Serialized ExecutionType {} as {}", value, serializedExecutionType);
     }
 
     private String getTestLinkValue(ExecutionType executionType) {

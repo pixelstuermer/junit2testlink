@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.pixelstuermer.junit2testlink.data.definition.ExecutionStatus;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -13,11 +14,15 @@ import java.io.IOException;
  *
  * @since 1.0.0
  */
+@Slf4j
 public class ExecutionStatusTestLinkSerializer extends JsonSerializer<ExecutionStatus> {
 
     @Override
     public void serialize(ExecutionStatus value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeString(getTestLinkValue(value));
+        final String serializedExecutionStatus = getTestLinkValue(value);
+        gen.writeString(serializedExecutionStatus);
+
+        LOG.trace("Serialized ExecutionStatus {} as {}", value, serializedExecutionStatus);
     }
 
     private String getTestLinkValue(ExecutionStatus executionStatus) {
