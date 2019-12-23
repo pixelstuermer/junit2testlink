@@ -6,7 +6,7 @@
 
     <groupId>com.github.pixelstuermer</groupId>
     <artifactId>junit2testlink</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-basic-functionality-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>junit2testlink</name>
