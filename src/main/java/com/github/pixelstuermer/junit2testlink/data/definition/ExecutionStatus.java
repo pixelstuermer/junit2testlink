@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enum for the test results.
+ * Enum for the execution status of TestLink.
  *
  * @since 1.0.0
  */
 @Getter
 @AllArgsConstructor
-public enum TestResult {
+public enum ExecutionStatus {
 
     PASSED('p'),
     FAILED('f'),

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enum for the execution types.
+ * Enum for the execution types of TestLink.
  *
  * @since 1.0.0
  */
