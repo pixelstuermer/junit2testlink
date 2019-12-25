@@ -35,4 +35,5 @@ public class InstantTestLinkSerializer extends JsonSerializer<Instant> {
     private String getTestLinkValue(Instant instant) {
         return TEST_LINK_FORMATTER.format(instant);
     }
+
 }

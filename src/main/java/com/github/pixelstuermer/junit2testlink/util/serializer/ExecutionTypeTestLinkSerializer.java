@@ -28,4 +28,5 @@ public class ExecutionTypeTestLinkSerializer extends JsonSerializer<ExecutionTyp
     private String getTestLinkValue(ExecutionType executionType) {
         return String.valueOf(executionType.getTestLinkValue());
     }
+
 }

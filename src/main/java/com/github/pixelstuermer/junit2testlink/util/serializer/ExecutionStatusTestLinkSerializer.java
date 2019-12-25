@@ -28,4 +28,5 @@ public class ExecutionStatusTestLinkSerializer extends JsonSerializer<ExecutionS
     private String getTestLinkValue(ExecutionStatus executionStatus) {
         return String.valueOf(executionStatus.getTestLinkValue());
     }
+
 }
