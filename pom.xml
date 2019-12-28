@@ -102,7 +102,6 @@
                 <version>${resources.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -127,7 +126,7 @@
                 <version>${source.version}</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -139,7 +138,7 @@
                 <version>${javadoc.version}</version>
                 <executions>
                     <execution>
-                        <id>attach-javadoc</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
