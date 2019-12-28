@@ -17,6 +17,8 @@ public @interface TestLink {
     /**
      * Represents the test case ID of TestLink.
      * The result of the test method will be reported to the TestLink test case with the given prefix.
+     *
+     * @return The TestLink test case ID
      */
     String testCaseId();
 
