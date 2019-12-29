@@ -2,6 +2,8 @@ package com.github.pixelstuermer.junit2testlink.service.test;
 
 import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.NoTestPropertiesException;
+import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
+import com.github.pixelstuermer.junit2testlink.testsupport.annotation.Report2TestLink;
 import com.github.pixelstuermer.junit2testlink.testsupport.annotation.TestLink;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -18,7 +20,8 @@ import java.util.Optional;
 @Slf4j
 public class TestPropertiesServiceImpl implements TestPropertiesService {
 
-    private static final Class<? extends Annotation> TEST_LINK_ANNOTATION = TestLink.class;
+    private static final Class<TestLink> TEST_LINK_ANNOTATION = TestLink.class;
+    private static final Class<Report2TestLink> REPORT_TO_TEST_LINK_ANNOTATION = Report2TestLink.class;
 
     @Override
     public TestProperties getTestProperties(ExtensionContext context) {
@@ -26,6 +29,7 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
                                                         .testLinkReportingEnabled(isTestLinkReportingEnabled(context))
                                                         .testClassName(getTestClassName(context))
                                                         .testMethodName(getTestMethodName(context))
+                                                        .testLinkNotesService(getTestLinkNotesService(context))
                                                         .build();
 
         LOG.trace("Evaluated test properties {}", properties.toString());
@@ -42,6 +46,11 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
 
     private String getTestMethodName(ExtensionContext context) {
         return getTestMethod(context).getName();
+    }
+
+    private Class<? extends TestLinkNotesService> getTestLinkNotesService(ExtensionContext context) {
+        final Report2TestLink report2TestLinkAnnotation = getAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        return report2TestLinkAnnotation.notesService();
     }
 
     private Class<?> getTestClass(ExtensionContext context) {
@@ -64,6 +73,16 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
 
         LOG.warn("Test method not present");
         throw new NoTestPropertiesException("Test method not present");
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private <T extends Annotation> T getAnnotation(ExtensionContext context, Class<T> annotation) {
+        try {
+            return getTestClass(context).getAnnotation(annotation);
+        } catch (NullPointerException e) {
+            LOG.warn("Annotation {} not present", annotation.getSimpleName());
+            throw new NoTestPropertiesException("Annotation " + annotation.getSimpleName() + " not present");
+        }
     }
 
 }

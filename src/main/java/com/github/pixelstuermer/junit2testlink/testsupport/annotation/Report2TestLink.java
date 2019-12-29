@@ -1,5 +1,7 @@
 package com.github.pixelstuermer.junit2testlink.testsupport.annotation;
 
+import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesServiceDefaultImpl;
 import com.github.pixelstuermer.junit2testlink.testsupport.extension.Report2TestLinkExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,4 +20,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @ExtendWith(Report2TestLinkExtension.class)
 public @interface Report2TestLink {
+
+    /**
+     * Represents the {@link TestLinkNotesService} implementation to use for generating the info text of an execution.
+     * This is the text which is additionally sent to TestLink and displayed when viewing the test execution.
+     *
+     * @return The service to generate the notes for TestLink ({@link TestLinkNotesServiceDefaultImpl} by default)
+     */
+    Class<? extends TestLinkNotesService> notesService() default TestLinkNotesServiceDefaultImpl.class;
+
 }
