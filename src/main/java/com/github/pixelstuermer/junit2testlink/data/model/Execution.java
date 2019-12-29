@@ -9,6 +9,7 @@ import com.github.pixelstuermer.junit2testlink.util.serializer.ExecutionTypeTest
 import com.github.pixelstuermer.junit2testlink.util.serializer.InstantTestLinkSerializer;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -20,6 +21,7 @@ import java.time.Instant;
  */
 @Getter
 @Builder
+@ToString
 public class Execution {
 
     @JsonProperty("testPlanID")
