@@ -28,7 +28,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testSuccessful(ExtensionContext context) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
 
-        LOG.trace("Test {} of class {} passed and enabled for TestLink reporting: {}",
+        LOG.trace("Test {} of class {} passed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
                 testProperties.isTestLinkReportingEnabled());
 
@@ -39,7 +39,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testFailed(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
 
-        LOG.trace("Test {} of class {} failed and enabled for TestLink reporting: {}",
+        LOG.trace("Test {} of class {} failed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
                 testProperties.isTestLinkReportingEnabled());
 
@@ -53,7 +53,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testAborted(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
 
-        LOG.trace("Test {} of class {} aborted and enabled for TestLink reporting: {}",
+        LOG.trace("Test {} of class {} aborted and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
                 testProperties.isTestLinkReportingEnabled());
 
@@ -67,7 +67,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
 
-        LOG.trace("Test {} of class {} disabled and enabled for TestLink reporting: {}",
+        LOG.trace("Test {} of class {} disabled and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
                 testProperties.isTestLinkReportingEnabled());
 

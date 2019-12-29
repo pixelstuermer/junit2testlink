@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public interface TestPropertiesService {
 
     /**
-     * Gets the properties of the test.
+     * Returns the properties of a test.
      *
      * @param context The context of the test
      * @return The test properties
