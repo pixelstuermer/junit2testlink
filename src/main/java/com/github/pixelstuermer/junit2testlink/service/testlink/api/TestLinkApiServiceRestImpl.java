@@ -51,7 +51,6 @@ public class TestLinkApiServiceRestImpl implements TestLinkApiService {
         postTestResult(httpEntity, testLinkExecutionsUri);
     }
 
-    // TODO Test leading/trailing slashes at host and path
     private URI getTestLinkExecutionsUri(TestLinkConfigService testLinkConfigService) {
         final URI testLinkExecutionsUri = UriComponentsBuilder.fromUri(testLinkConfigService.getTestLinkBaseUri())
                                                               .path(TEST_LINK_REST_API_PATH)
