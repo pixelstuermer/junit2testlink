@@ -4,8 +4,6 @@ import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationException;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesServiceImpl;
-import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiService;
-import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiServiceRestImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +22,11 @@ import java.util.Optional;
 public class Report2TestLinkExtension implements TestWatcher {
 
     private TestPropertiesService testPropertiesService;
-    private TestLinkApiService testLinkApiService;
+    //    private TestLinkApiService testLinkApiService;
 
     public Report2TestLinkExtension() {
         this.testPropertiesService = new TestPropertiesServiceImpl();
-        this.testLinkApiService = new TestLinkApiServiceRestImpl();
+        //    this.testLinkApiService = new TestLinkApiServiceRestImpl();
     }
 
     @Override
