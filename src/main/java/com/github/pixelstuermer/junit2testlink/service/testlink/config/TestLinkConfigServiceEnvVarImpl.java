@@ -7,10 +7,10 @@ import java.net.URI;
 
 /**
  * Default implementation of the {@link TestLinkConfigService} interface to provide the TestLink properties.
- * The implementation reads the properties from the environment variables.
+ * This implementation reads the properties from the environment variables.
  * Like this, it is suited for automated test reporting, e.g. while using a build server within a CI pipeline.
  * The tests are therefore only reported if the required environment variables are set.
- * If not, like when executing the tests within an IDE, no reporting is done.
+ * If they are not set, e.g. when only executing the tests within an IDE, the reporting is disabled.
  *
  * @since 1.0.0
  */
@@ -48,13 +48,13 @@ public class TestLinkConfigServiceEnvVarImpl implements TestLinkConfigService {
     }
 
     private String getEnvironmentVariable(EnvironmentVariable environmentVariable, boolean loggingEnabled) {
-        final String envVar = System.getProperty(environmentVariable.name());
+        final String envVarFromSystem = System.getProperty(environmentVariable.name());
 
         if (loggingEnabled) {
-            LOG.trace("Read environment variable {} with value {}", environmentVariable.name(), envVar);
+            LOG.trace("Read environment variable {} with value {}", environmentVariable.name(), envVarFromSystem);
         }
 
-        return envVar;
+        return envVarFromSystem;
     }
 
 }

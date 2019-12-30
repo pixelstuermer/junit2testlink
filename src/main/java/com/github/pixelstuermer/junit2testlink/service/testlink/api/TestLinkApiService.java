@@ -13,8 +13,8 @@ public interface TestLinkApiService {
     /**
      * Sends a test execution result to TestLink.
      *
-     * @param execution             The execution of the current test
-     * @param testLinkConfigService The service to provide the TestLink configuration
+     * @param execution             The execution of the current test to be sent to TestLink
+     * @param testLinkConfigService The service which provides the TestLink configuration
      */
     void reportTestResult(TestLinkConfigService testLinkConfigService, Execution execution);
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pixelstuermer.junit2testlink.data.model.Execution;
 import com.github.pixelstuermer.junit2testlink.error.TestLinkApiException;
 import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,26 +22,22 @@ import java.net.URI;
 
 /**
  * Implementation of the {@link TestLinkApiService} interface to report test results to TestLink.
- * The implementation uses the REST API of TestLink and sends the execution via HTTP POST.
- * The {@link Execution} model is sent as JSON in the HTTP body.
+ * This implementation uses the REST API of TestLink and sends the execution via HTTP POST.
+ * The {@link Execution} model is sent as JSON in the body and authentication is done using Basic Auth in the header.
  *
  * @since 1.0.0
  */
 @Slf4j
+@AllArgsConstructor
 public class TestLinkApiServiceRestImpl implements TestLinkApiService {
 
     private static final String BASIC_AUTH_PREFIX = "Basic ";
-    private static final char BASIC_AUTH_USERNAME_PASSWORD_SEPARATOR = ':';
+    private static final char BASIC_AUTH_USER_PASSWORD_SEPARATOR = ':';
 
     private static final String TEST_LINK_REST_API_PATH = "/lib/api/rest/v1/executions";
 
     private ObjectMapper objectMapper;
     private RestTemplate restTemplate;
-
-    public TestLinkApiServiceRestImpl(ObjectMapper objectMapper, RestTemplate restTemplate) {
-        this.objectMapper = objectMapper;
-        this.restTemplate = restTemplate;
-    }
 
     @Override
     public void reportTestResult(TestLinkConfigService testLinkConfigService, Execution execution) {
@@ -62,8 +59,8 @@ public class TestLinkApiServiceRestImpl implements TestLinkApiService {
     }
 
     private MultiValueMap<String, String> getHttpHeaders(TestLinkConfigService testLinkConfigService) {
-        final String apiKey = testLinkConfigService.getTestLinkApiKey() + BASIC_AUTH_USERNAME_PASSWORD_SEPARATOR;
-        final String apiKeyBase64Encoded = encodeToBase64(apiKey);
+        final String apiKeyBasicAuth = testLinkConfigService.getTestLinkApiKey() + BASIC_AUTH_USER_PASSWORD_SEPARATOR;
+        final String apiKeyBase64Encoded = encodeToBase64(apiKeyBasicAuth);
 
         final LinkedMultiValueMap<String, String> httpHeaders = new LinkedMultiValueMap<>();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, BASIC_AUTH_PREFIX + apiKeyBase64Encoded);

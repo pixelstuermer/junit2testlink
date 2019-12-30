@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
  * Default implementation of the {@link TestLinkNotesService} interface to define the TestLink notes info text.
- * Is concatenates the {@link TestProperties} of a test method and uses them as the TestLink notes text.
+ * Is therefore concatenates the {@link TestProperties} of a test method.
  *
  * @since 1.0.0
  */

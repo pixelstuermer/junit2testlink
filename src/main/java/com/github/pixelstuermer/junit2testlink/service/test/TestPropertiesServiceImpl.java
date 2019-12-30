@@ -10,7 +10,6 @@ import com.github.pixelstuermer.junit2testlink.testsupport.annotation.TestLink;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -22,10 +21,8 @@ import java.util.Optional;
 @Slf4j
 public class TestPropertiesServiceImpl implements TestPropertiesService {
 
-    // TODO Refactor
-
-    private static final Class<TestLink> TEST_LINK_ANNOTATION = TestLink.class;
-    private static final Class<Report2TestLink> REPORT_TO_TEST_LINK_ANNOTATION = Report2TestLink.class;
+    private static final Class<TestLink> TEST_LINK = TestLink.class;
+    private static final Class<Report2TestLink> REPORT_TO_TEST_LINK = Report2TestLink.class;
 
     @Override
     public TestProperties getTestProperties(ExtensionContext context) {
@@ -44,12 +41,12 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     }
 
     private boolean isTestLinkReportingEnabled(ExtensionContext context) {
-        return getTestMethod(context).isAnnotationPresent(TEST_LINK_ANNOTATION);
+        return getTestMethod(context).isAnnotationPresent(TEST_LINK);
     }
 
     private String getTestCaseId(ExtensionContext context) {
         if (isTestLinkReportingEnabled(context)) {
-            final TestLink testLinkAnnotation = getMethodAnnotation(context, TEST_LINK_ANNOTATION);
+            final TestLink testLinkAnnotation = getTestMethod(context).getAnnotation(TEST_LINK);
             return testLinkAnnotation.testCaseId();
         }
 
@@ -65,17 +62,17 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     }
 
     private Class<? extends TestLinkNotesService> getTestLinkNotesService(ExtensionContext context) {
-        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        final Report2TestLink report2TestLinkAnnotation = getTestClass(context).getAnnotation(REPORT_TO_TEST_LINK);
         return report2TestLinkAnnotation.notesService();
     }
 
     private Class<? extends TestLinkStatusService> getTestLinkStatusService(ExtensionContext context) {
-        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        final Report2TestLink report2TestLinkAnnotation = getTestClass(context).getAnnotation(REPORT_TO_TEST_LINK);
         return report2TestLinkAnnotation.statusService();
     }
 
     private Class<? extends TestLinkConfigService> getTestLinkConfigService(ExtensionContext context) {
-        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        final Report2TestLink report2TestLinkAnnotation = getTestClass(context).getAnnotation(REPORT_TO_TEST_LINK);
         return report2TestLinkAnnotation.configService();
     }
 
@@ -99,26 +96,6 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
 
         LOG.warn("Test method not present");
         throw new NoTestPropertiesException("Test method not present");
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private <T extends Annotation> T getClassAnnotation(ExtensionContext context, Class<T> annotation) {
-        try {
-            return getTestClass(context).getAnnotation(annotation);
-        } catch (NullPointerException e) {
-            LOG.warn("Class annotation {} not present", annotation.getSimpleName());
-            throw new NoTestPropertiesException("Class annotation " + annotation.getSimpleName() + " not present");
-        }
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private <T extends Annotation> T getMethodAnnotation(ExtensionContext context, Class<T> annotation) {
-        try {
-            return getTestMethod(context).getAnnotation(annotation);
-        } catch (NullPointerException e) {
-            LOG.warn("Method annotation {} not present", annotation.getSimpleName());
-            throw new NoTestPropertiesException("Method annotation " + annotation.getSimpleName() + " not present");
-        }
     }
 
 }

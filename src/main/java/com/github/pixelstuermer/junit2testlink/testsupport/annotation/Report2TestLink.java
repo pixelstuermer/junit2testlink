@@ -15,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Class-level annotation to enable the method-level TestLink reporting with {@link TestLink}.
+ * Class-level annotation to enable the method-level TestLink reporting with the {@link TestLink} annotation.
  * It furthermore registers the {@link Report2TestLinkExtension} extension.
  *
  * @since 1.0.0
@@ -29,7 +29,7 @@ public @interface Report2TestLink {
      * Represents the {@link TestLinkNotesService} implementation to use for generating the info text of an execution.
      * This is the text which is additionally sent to TestLink and displayed when viewing the test execution.
      *
-     * @return The service to generate the notes for TestLink ({@link TestLinkNotesServiceDefaultImpl} by default)
+     * @return The service to generate the notes text for TestLink ({@link TestLinkNotesServiceDefaultImpl} by default)
      */
     Class<? extends TestLinkNotesService> notesService() default TestLinkNotesServiceDefaultImpl.class;
 

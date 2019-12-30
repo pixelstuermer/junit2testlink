@@ -5,7 +5,7 @@ import com.github.pixelstuermer.junit2testlink.testsupport.annotation.Report2Tes
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * Interface for generating the notes which are sent to TestLink to be displayed at a test execution.
+ * Interface for generating the notes which are sent to TestLink to be displayed for each a test execution.
  * It can be implemented and passed to the {@link Report2TestLink} annotation to customize the automated reporting.
  *
  * @since 1.0.0

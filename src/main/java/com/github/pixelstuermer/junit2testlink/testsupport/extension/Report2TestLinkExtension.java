@@ -22,15 +22,13 @@ import java.time.Instant;
 import java.util.Optional;
 
 /**
- * Implementation of the JUnit {@link TestWatcher} interface to collect and report a test result to TestLink.
+ * Implementation of the JUnit {@link TestWatcher} interface to collect and report a test execution result to TestLink.
  * The implemented methods are called after a test method was executed.
  *
  * @since 1.0.0
  */
 @Slf4j
 public class Report2TestLinkExtension implements TestWatcher {
-
-    // TODO Refactor
 
     private TestPropertiesService testPropertiesService;
     private TestLinkApiService testLinkApiService;
@@ -79,13 +77,15 @@ public class Report2TestLinkExtension implements TestWatcher {
     }
 
     private void evaluateReporting(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
-        // First check if reporting is enabled on test method-level
+        // First check if reporting is enabled on method-level
         if (testProperties.isTestLinkReportingEnabled()) {
             final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
+            final TestLinkNotesService notesService = getServiceInstance(testProperties, TestLinkNotesService.class);
 
             // Then check if reporting is enabled on globally
             if (configService.isTestLinkReportingEnabled()) {
-                reportTestResult(context, testProperties, status);
+                // Only then proceed with the TestLink reporting
+                reportTestResult(context, testProperties, status, configService, notesService);
             }
         }
 
@@ -93,19 +93,18 @@ public class Report2TestLinkExtension implements TestWatcher {
                 testProperties.getTestClassName());
     }
 
-    private void reportTestResult(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
-        final Execution execution = getExecution(context, testProperties, status);
-        final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
+    private void reportTestResult(ExtensionContext context, TestProperties testProperties, ExecutionStatus status,
+                                  TestLinkConfigService configService, TestLinkNotesService notesService) {
+        final Execution execution = getExecution(context, testProperties, status, configService, notesService);
 
         testLinkApiService.reportTestResult(configService, execution);
+
         LOG.trace("Reported test {} of class {} with result {} to TestLink", testProperties.getTestMethodName(),
                 testProperties.getTestClassName(), status);
     }
 
-    private Execution getExecution(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
-        final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
-        final TestLinkNotesService notesService = getServiceInstance(testProperties, TestLinkNotesService.class);
-
+    private Execution getExecution(ExtensionContext context, TestProperties testProperties, ExecutionStatus status,
+                                   TestLinkConfigService configService, TestLinkNotesService notesService) {
         final Execution execution = Execution.builder()
                                              .testPlan(configService.getTestLinkPlanId())
                                              .build(configService.getTestLinkBuildId())
