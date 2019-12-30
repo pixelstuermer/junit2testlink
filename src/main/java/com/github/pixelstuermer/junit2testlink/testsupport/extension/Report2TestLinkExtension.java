@@ -1,6 +1,9 @@
 package com.github.pixelstuermer.junit2testlink.testsupport.extension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pixelstuermer.junit2testlink.data.definition.ExecutionStatus;
+import com.github.pixelstuermer.junit2testlink.data.definition.ExecutionType;
+import com.github.pixelstuermer.junit2testlink.data.model.Execution;
 import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationException;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -25,6 +29,8 @@ import java.util.Optional;
  */
 @Slf4j
 public class Report2TestLinkExtension implements TestWatcher {
+
+    // TODO Refactor
 
     private TestPropertiesService testPropertiesService;
     private TestLinkApiService testLinkApiService;
@@ -37,23 +43,17 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testSuccessful(ExtensionContext context) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
+        final TestLinkStatusService statusService = getServiceInstance(testProperties, TestLinkStatusService.class);
 
-        LOG.trace("Test {} of class {} passed and enabled for TestLink reporting {}",
-                testProperties.getTestMethodName(), testProperties.getTestClassName(),
-                testProperties.isTestLinkReportingEnabled());
-
-        // TODO Implement, extract and rework logging
+        evaluateReporting(context, testProperties, statusService.getTestSuccessfulExecutionStatus());
     }
 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
+        final TestLinkStatusService statusService = getServiceInstance(testProperties, TestLinkStatusService.class);
 
-        LOG.trace("Test {} of class {} failed and enabled for TestLink reporting {}",
-                testProperties.getTestMethodName(), testProperties.getTestClassName(),
-                testProperties.isTestLinkReportingEnabled());
-
-        // TODO Implement, extract and rework logging
+        evaluateReporting(context, testProperties, statusService.getTestFailedExecutionStatus());
     }
 
     /*
@@ -62,12 +62,9 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
+        final TestLinkStatusService statusService = getServiceInstance(testProperties, TestLinkStatusService.class);
 
-        LOG.trace("Test {} of class {} aborted and enabled for TestLink reporting {}",
-                testProperties.getTestMethodName(), testProperties.getTestClassName(),
-                testProperties.isTestLinkReportingEnabled());
-
-        // TODO Implement, extract and rework logging
+        evaluateReporting(context, testProperties, statusService.getTestAbortedExecutionStatus());
     }
 
     /*
@@ -76,50 +73,79 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
+        final TestLinkStatusService statusService = getServiceInstance(testProperties, TestLinkStatusService.class);
 
-        LOG.trace("Test {} of class {} disabled and enabled for TestLink reporting {}",
-                testProperties.getTestMethodName(), testProperties.getTestClassName(),
-                testProperties.isTestLinkReportingEnabled());
-
-        // TODO Implement, extract and rework logging
+        evaluateReporting(context, testProperties, statusService.getTestDisabledExecutionStatus());
     }
 
-    private TestLinkNotesService getTestLinkNotesService(TestProperties testProperties) {
-        final Class<? extends TestLinkNotesService> testLinkNotesService = testProperties.getTestLinkNotesService();
+    private void evaluateReporting(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
+        // First check if reporting is enabled on test method-level
+        if (testProperties.isTestLinkReportingEnabled()) {
+            final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
 
-        try {
-            return testLinkNotesService.getConstructor()
-                                       .newInstance();
-        } catch (Exception e) {
-            LOG.warn("Cannot instantiate TestLinkNotesService of type {}", testLinkNotesService.getSimpleName());
-            throw new ServiceInstantiationException("Cannot instantiate TestLinkNotesService of type " +
-                    testLinkNotesService.getSimpleName());
+            // Then check if reporting is enabled on globally
+            if (configService.isTestLinkReportingEnabled()) {
+                reportTestResult(context, testProperties, status);
+            }
         }
+
+        LOG.trace("No reporting of test {} of class {} to TestLink", testProperties.getTestMethodName(),
+                testProperties.getTestClassName());
     }
 
-    private TestLinkStatusService getTestLinkStatusService(TestProperties testProperties) {
-        final Class<? extends TestLinkStatusService> testLinkStatusService = testProperties.getTestLinkStatusService();
+    private void reportTestResult(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
+        final Execution execution = getExecution(context, testProperties, status);
+        final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
+
+        testLinkApiService.reportTestResult(configService, execution);
+        LOG.trace("Reported test {} of class {} with result {} to TestLink", testProperties.getTestMethodName(),
+                testProperties.getTestClassName(), status);
+    }
+
+    private Execution getExecution(ExtensionContext context, TestProperties testProperties, ExecutionStatus status) {
+        final TestLinkConfigService configService = getServiceInstance(testProperties, TestLinkConfigService.class);
+        final TestLinkNotesService notesService = getServiceInstance(testProperties, TestLinkNotesService.class);
+
+        final Execution execution = Execution.builder()
+                                             .testPlan(configService.getTestLinkPlanId())
+                                             .build(configService.getTestLinkBuildId())
+                                             .testCase(testProperties.getTestCaseId())
+                                             .platform(configService.getTestLinkPlatformId())
+                                             .timestamp(getCurrentTimestamp())
+                                             .notes(notesService.getNotes(context, testProperties))
+                                             .type(ExecutionType.AUTOMATED)
+                                             .result(status)
+                                             .build();
+
+        LOG.trace("Built Execution model {}", execution.toString());
+        return execution;
+    }
+
+    private Instant getCurrentTimestamp() {
+        return Instant.now();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getServiceInstance(TestProperties testProperties, Class<T> serviceClass) {
+        final Class<T> evaluatedServiceClass;
+
+        if (serviceClass.equals(TestLinkNotesService.class)) {
+            evaluatedServiceClass = (Class<T>) testProperties.getTestLinkNotesService();
+        } else if (serviceClass.equals(TestLinkStatusService.class)) {
+            evaluatedServiceClass = (Class<T>) testProperties.getTestLinkStatusService();
+        } else if (serviceClass.equals(TestLinkConfigService.class)) {
+            evaluatedServiceClass = (Class<T>) testProperties.getTestLinkConfigService();
+        } else {
+            LOG.warn("Cannot resolve service class {}", serviceClass.getName());
+            throw new ServiceInstantiationException("Cannot resolve service class " + serviceClass.getName());
+        }
 
         try {
-            return testLinkStatusService.getConstructor()
+            return evaluatedServiceClass.getConstructor()
                                         .newInstance();
         } catch (Exception e) {
-            LOG.warn("Cannot instantiate TestLinkStatusService of type {}", testLinkStatusService.getSimpleName());
-            throw new ServiceInstantiationException("Cannot instantiate TestLinkStatusService of type " +
-                    testLinkStatusService.getSimpleName());
-        }
-    }
-
-    private TestLinkConfigService getTestLinkConfigService(TestProperties testProperties) {
-        final Class<? extends TestLinkConfigService> testLinkConfigService = testProperties.getTestLinkConfigService();
-
-        try {
-            return testLinkConfigService.getConstructor()
-                                        .newInstance();
-        } catch (Exception e) {
-            LOG.warn("Cannot instantiate TestLinkConfigService of type {}", testLinkConfigService.getSimpleName());
-            throw new ServiceInstantiationException("Cannot instantiate TestLinkConfigService of type " +
-                    testLinkConfigService.getSimpleName());
+            LOG.warn("Cannot instantiate service of type {}", serviceClass.getName());
+            throw new ServiceInstantiationException("Cannot instantiate service of type " + serviceClass.getName());
         }
     }
 
