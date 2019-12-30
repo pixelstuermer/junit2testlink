@@ -33,6 +33,13 @@ public interface TestLinkConfigService {
     URI getTestLinkBaseUri();
 
     /**
+     * TestLink configuration to get the platform ID.
+     *
+     * @return The platform ID
+     */
+    int getTestLinkPlatformId();
+
+    /**
      * TestLink configuration to get the test plan ID.
      *
      * @return The test plan ID

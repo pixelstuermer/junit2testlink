@@ -28,6 +28,11 @@ public class TestLinkConfigServiceEnvVarImpl implements TestLinkConfigService {
     }
 
     @Override
+    public int getTestLinkPlatformId() {
+        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLATFORM_ID));
+    }
+
+    @Override
     public String getTestLinkPlanId() {
         return getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLAN_ID);
     }
