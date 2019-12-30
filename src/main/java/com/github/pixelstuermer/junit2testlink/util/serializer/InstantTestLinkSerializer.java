@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_TIME;
 
 /**
  * Serializer for Jackson's {@link ObjectMapper} for the TestLink representation of {@link Instant} objects.
@@ -19,10 +23,11 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class InstantTestLinkSerializer extends JsonSerializer<Instant> {
 
-    private static final String TEST_LINK_PATTERN = "uuuu-MM-dd HH:mm:ss";
-
-    private static final DateTimeFormatter TEST_LINK_FORMATTER = DateTimeFormatter.ofPattern(TEST_LINK_PATTERN)
-                                                                                  .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().append(ISO_LOCAL_DATE)
+                                                                                     .appendLiteral(' ')
+                                                                                     .append(ISO_LOCAL_TIME)
+                                                                                     .toFormatter()
+                                                                                     .withZone(ZoneId.systemDefault());
 
     @Override
     public void serialize(Instant value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -33,7 +38,7 @@ public class InstantTestLinkSerializer extends JsonSerializer<Instant> {
     }
 
     private String getTestLinkValue(Instant instant) {
-        return TEST_LINK_FORMATTER.format(instant);
+        return FORMATTER.format(instant);
     }
 
 }
