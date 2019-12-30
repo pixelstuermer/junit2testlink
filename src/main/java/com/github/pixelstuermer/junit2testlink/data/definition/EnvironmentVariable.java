@@ -9,6 +9,7 @@ public enum EnvironmentVariable {
 
     TEST_LINK_ENABLED,
     TEST_LINK_BASE_URI,
+    TEST_LINK_API_KEY,
     TEST_LINK_PLATFORM_ID,
     TEST_LINK_PLAN_ID,
     TEST_LINK_BUILD_ID

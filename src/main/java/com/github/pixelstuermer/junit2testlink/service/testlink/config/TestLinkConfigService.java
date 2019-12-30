@@ -33,6 +33,13 @@ public interface TestLinkConfigService {
     URI getTestLinkBaseUri();
 
     /**
+     * TestLink configuration to get the API key for authentication.
+     *
+     * @return The API key for authentication
+     */
+    String getTestLinkApiKey();
+
+    /**
      * TestLink configuration to get the platform ID.
      *
      * @return The platform ID
