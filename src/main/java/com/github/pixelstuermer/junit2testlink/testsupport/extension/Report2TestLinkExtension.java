@@ -1,15 +1,19 @@
 package com.github.pixelstuermer.junit2testlink.testsupport.extension;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationException;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesServiceImpl;
+import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiServiceRestImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -23,11 +27,11 @@ import java.util.Optional;
 public class Report2TestLinkExtension implements TestWatcher {
 
     private TestPropertiesService testPropertiesService;
-    //    private TestLinkApiService testLinkApiService;
+    private TestLinkApiService testLinkApiService;
 
     public Report2TestLinkExtension() {
         this.testPropertiesService = new TestPropertiesServiceImpl();
-        //    this.testLinkApiService = new TestLinkApiServiceRestImpl();
+        this.testLinkApiService = new TestLinkApiServiceRestImpl(new ObjectMapper(), new RestTemplate());
     }
 
     @Override

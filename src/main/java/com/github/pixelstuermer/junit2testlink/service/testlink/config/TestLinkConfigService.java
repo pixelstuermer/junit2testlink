@@ -28,7 +28,7 @@ public interface TestLinkConfigService {
     /**
      * TestLink configuration to get the base URI.
      *
-     * @return The base URI
+     * @return The base URI (including the scheme, host and port)
      */
     URI getTestLinkBaseUri();
 
