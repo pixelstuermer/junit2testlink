@@ -44,13 +44,13 @@ public interface TestLinkConfigService {
      *
      * @return The test plan ID
      */
-    String getTestLinkPlanId();
+    int getTestLinkPlanId();
 
     /**
      * TestLink configuration to get the test build ID.
      *
      * @return The test build ID
      */
-    String getTestLinkBuildId();
+    int getTestLinkBuildId();
 
 }
