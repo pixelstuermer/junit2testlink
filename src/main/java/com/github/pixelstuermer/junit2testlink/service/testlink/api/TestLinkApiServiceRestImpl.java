@@ -76,7 +76,7 @@ public class TestLinkApiServiceRestImpl implements TestLinkApiService {
     private String encodeToBase64(String plaintext) {
         final String encodedBase64 = Base64Utils.encodeToString(plaintext.getBytes());
 
-        LOG.trace("Encoded {} to Base64 {}", plaintext, encodedBase64);
+        LOG.trace("Encoded plaintext to Base64");
         return encodedBase64;
     }
 

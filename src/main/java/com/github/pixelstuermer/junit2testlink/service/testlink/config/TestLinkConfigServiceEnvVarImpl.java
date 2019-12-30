@@ -19,38 +19,41 @@ public class TestLinkConfigServiceEnvVarImpl implements TestLinkConfigService {
 
     @Override
     public boolean isTestLinkReportingEnabled() {
-        return Boolean.parseBoolean(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_ENABLED));
+        return Boolean.parseBoolean(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_ENABLED, true));
     }
 
     @Override
     public URI getTestLinkBaseUri() {
-        return URI.create(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_BASE_URI));
+        return URI.create(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_BASE_URI, true));
     }
 
     @Override
     public String getTestLinkApiKey() {
-        return getEnvironmentVariable(EnvironmentVariable.TEST_LINK_API_KEY);
+        return getEnvironmentVariable(EnvironmentVariable.TEST_LINK_API_KEY, false);
     }
 
     @Override
     public int getTestLinkPlatformId() {
-        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLATFORM_ID));
+        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLATFORM_ID, true));
     }
 
     @Override
     public int getTestLinkPlanId() {
-        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLAN_ID));
+        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_PLAN_ID, true));
     }
 
     @Override
     public int getTestLinkBuildId() {
-        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_BUILD_ID));
+        return Integer.parseInt(getEnvironmentVariable(EnvironmentVariable.TEST_LINK_BUILD_ID, true));
     }
 
-    private String getEnvironmentVariable(EnvironmentVariable environmentVariable) {
+    private String getEnvironmentVariable(EnvironmentVariable environmentVariable, boolean loggingEnabled) {
         final String envVar = System.getProperty(environmentVariable.name());
 
-        LOG.trace("Read environment variable {} with value {}", environmentVariable.name(), envVar);
+        if (loggingEnabled) {
+            LOG.trace("Read environment variable {} with value {}", environmentVariable.name(), envVar);
+        }
+
         return envVar;
     }
 

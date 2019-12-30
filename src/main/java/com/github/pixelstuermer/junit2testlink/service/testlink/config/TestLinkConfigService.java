@@ -34,6 +34,7 @@ public interface TestLinkConfigService {
 
     /**
      * TestLink configuration to get the API key for authentication.
+     * Please remember not to log the secret API key.
      *
      * @return The API key for authentication
      */
