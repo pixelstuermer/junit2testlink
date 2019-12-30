@@ -1,7 +1,6 @@
 package com.github.pixelstuermer.junit2testlink.service.testlink.config;
 
 import com.github.pixelstuermer.junit2testlink.data.definition.EnvironmentVariable;
-import com.github.pixelstuermer.junit2testlink.error.EnvironmentVariableException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
@@ -39,15 +38,10 @@ public class TestLinkConfigServiceEnvVarImpl implements TestLinkConfigService {
     }
 
     private String getEnvironmentVariable(EnvironmentVariable environmentVariable) {
-        final String envVar = System.getenv(environmentVariable.name());
+        final String envVar = System.getProperty(environmentVariable.name());
 
-        if (envVar != null && envVar.length() > 0) {
-            LOG.trace("Read variable {} with value {}", environmentVariable.name(), envVar);
-            return envVar;
-        }
-
-        LOG.warn("Cannot read environment variable {}", environmentVariable.name());
-        throw new EnvironmentVariableException("Cannot read environment variable " + environmentVariable.name());
+        LOG.trace("Read environment variable {} with value {}", environmentVariable.name(), envVar);
+        return envVar;
     }
 
 }
