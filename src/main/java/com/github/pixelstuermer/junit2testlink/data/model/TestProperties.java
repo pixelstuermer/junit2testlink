@@ -1,5 +1,6 @@
 package com.github.pixelstuermer.junit2testlink.data.model;
 
+import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.Builder;
@@ -27,5 +28,7 @@ public class TestProperties {
     private Class<? extends TestLinkNotesService> testLinkNotesService;
 
     private Class<? extends TestLinkStatusService> testLinkStatusService;
+
+    private Class<? extends TestLinkConfigService> testLinkConfigService;
 
 }

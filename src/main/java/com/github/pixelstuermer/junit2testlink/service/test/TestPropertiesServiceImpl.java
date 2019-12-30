@@ -2,6 +2,7 @@ package com.github.pixelstuermer.junit2testlink.service.test;
 
 import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.NoTestPropertiesException;
+import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import com.github.pixelstuermer.junit2testlink.testsupport.annotation.Report2TestLink;
@@ -33,6 +34,7 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
                                                         .testMethodName(getTestMethodName(context))
                                                         .testLinkNotesService(getTestLinkNotesService(context))
                                                         .testLinkStatusService(getTestLinkStatusService(context))
+                                                        .testLinkConfigService(getTestLinkConfigService(context))
                                                         .build();
 
         LOG.trace("Evaluated test properties {}", properties.toString());
@@ -68,6 +70,11 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     private Class<? extends TestLinkStatusService> getTestLinkStatusService(ExtensionContext context) {
         final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
         return report2TestLinkAnnotation.statusService();
+    }
+
+    private Class<? extends TestLinkConfigService> getTestLinkConfigService(ExtensionContext context) {
+        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        return report2TestLinkAnnotation.configService();
     }
 
     private Class<?> getTestClass(ExtensionContext context) {

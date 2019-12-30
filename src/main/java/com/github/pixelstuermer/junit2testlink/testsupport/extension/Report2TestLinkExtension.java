@@ -4,6 +4,7 @@ import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationException;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesServiceImpl;
+import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +103,19 @@ public class Report2TestLinkExtension implements TestWatcher {
             LOG.warn("Cannot instantiate TestLinkStatusService of type {}", testLinkStatusService.getSimpleName());
             throw new ServiceInstantiationException("Cannot instantiate TestLinkStatusService of type " +
                     testLinkStatusService.getSimpleName());
+        }
+    }
+
+    private TestLinkConfigService getTestLinkConfigService(TestProperties testProperties) {
+        final Class<? extends TestLinkConfigService> testLinkConfigService = testProperties.getTestLinkConfigService();
+
+        try {
+            return testLinkConfigService.getConstructor()
+                                        .newInstance();
+        } catch (Exception e) {
+            LOG.warn("Cannot instantiate TestLinkConfigService of type {}", testLinkConfigService.getSimpleName());
+            throw new ServiceInstantiationException("Cannot instantiate TestLinkConfigService of type " +
+                    testLinkConfigService.getSimpleName());
         }
     }
 

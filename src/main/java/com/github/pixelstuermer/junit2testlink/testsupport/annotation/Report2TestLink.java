@@ -1,5 +1,7 @@
 package com.github.pixelstuermer.junit2testlink.testsupport.annotation;
 
+import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.config.TestLinkConfigServiceEnvVarImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesServiceDefaultImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
@@ -38,5 +40,13 @@ public @interface Report2TestLink {
      * @return The service to resolve the execution status with ({@link TestLinkStatusServiceDefaultImpl} by default)
      */
     Class<? extends TestLinkStatusService> statusService() default TestLinkStatusServiceDefaultImpl.class;
+
+    /**
+     * Represents the {@link TestLinkConfigService} implementation to use for providing the TestLink properties.
+     * This includes configurable options like base URI, test plan ID, build ID, etc.
+     *
+     * @return The service to provide the TestLink config ({@link TestLinkConfigServiceEnvVarImpl} by default)
+     */
+    Class<? extends TestLinkConfigService> configService() default TestLinkConfigServiceEnvVarImpl.class;
 
 }
