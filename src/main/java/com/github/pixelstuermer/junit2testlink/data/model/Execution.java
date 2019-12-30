@@ -15,7 +15,7 @@ import java.time.Instant;
 
 /**
  * POJO for a single TestLink execution.
- * It therefore represents the test result report of one unit test which is sent to TestLink.
+ * It therefore represents the test result report of one test which is sent to TestLink.
  *
  * @since 1.0.0
  */

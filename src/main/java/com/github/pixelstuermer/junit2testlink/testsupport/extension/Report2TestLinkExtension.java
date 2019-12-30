@@ -4,6 +4,8 @@ import com.github.pixelstuermer.junit2testlink.data.model.TestProperties;
 import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationException;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesServiceImpl;
+import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.api.TestLinkApiServiceRestImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +24,16 @@ import java.util.Optional;
 public class Report2TestLinkExtension implements TestWatcher {
 
     private TestPropertiesService testPropertiesService;
+    private TestLinkApiService testLinkApiService;
 
     public Report2TestLinkExtension() {
         this.testPropertiesService = new TestPropertiesServiceImpl();
+        this.testLinkApiService = new TestLinkApiServiceRestImpl();
     }
 
     @Override
     public void testSuccessful(ExtensionContext context) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
-        final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
-        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} passed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -43,8 +45,6 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
-        final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
-        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} failed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -59,8 +59,6 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
-        final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
-        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} aborted and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -75,8 +73,6 @@ public class Report2TestLinkExtension implements TestWatcher {
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
-        final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
-        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} disabled and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),

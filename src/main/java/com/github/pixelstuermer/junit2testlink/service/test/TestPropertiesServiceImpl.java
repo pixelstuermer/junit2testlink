@@ -45,12 +45,11 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
 
     private String getTestCaseId(ExtensionContext context) {
         if (isTestLinkReportingEnabled(context)) {
-            final TestLink testLinkAnnotation = getAnnotation(context, TEST_LINK_ANNOTATION);
+            final TestLink testLinkAnnotation = getMethodAnnotation(context, TEST_LINK_ANNOTATION);
             return testLinkAnnotation.testCaseId();
         }
 
-        LOG.warn("Test case ID not present");
-        throw new NoTestPropertiesException("Test case ID not present");
+        return null;
     }
 
     private String getTestClassName(ExtensionContext context) {
@@ -62,12 +61,12 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     }
 
     private Class<? extends TestLinkNotesService> getTestLinkNotesService(ExtensionContext context) {
-        final Report2TestLink report2TestLinkAnnotation = getAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
         return report2TestLinkAnnotation.notesService();
     }
 
     private Class<? extends TestLinkStatusService> getTestLinkStatusService(ExtensionContext context) {
-        final Report2TestLink report2TestLinkAnnotation = getAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
+        final Report2TestLink report2TestLinkAnnotation = getClassAnnotation(context, REPORT_TO_TEST_LINK_ANNOTATION);
         return report2TestLinkAnnotation.statusService();
     }
 
@@ -94,12 +93,22 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private <T extends Annotation> T getAnnotation(ExtensionContext context, Class<T> annotation) {
+    private <T extends Annotation> T getClassAnnotation(ExtensionContext context, Class<T> annotation) {
         try {
             return getTestClass(context).getAnnotation(annotation);
         } catch (NullPointerException e) {
-            LOG.warn("Annotation {} not present", annotation.getSimpleName());
-            throw new NoTestPropertiesException("Annotation " + annotation.getSimpleName() + " not present");
+            LOG.warn("Class annotation {} not present", annotation.getSimpleName());
+            throw new NoTestPropertiesException("Class annotation " + annotation.getSimpleName() + " not present");
+        }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private <T extends Annotation> T getMethodAnnotation(ExtensionContext context, Class<T> annotation) {
+        try {
+            return getTestMethod(context).getAnnotation(annotation);
+        } catch (NullPointerException e) {
+            LOG.warn("Method annotation {} not present", annotation.getSimpleName());
+            throw new NoTestPropertiesException("Method annotation " + annotation.getSimpleName() + " not present");
         }
     }
 

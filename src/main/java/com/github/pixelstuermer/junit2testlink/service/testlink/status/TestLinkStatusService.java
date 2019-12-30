@@ -1,10 +1,13 @@
 package com.github.pixelstuermer.junit2testlink.service.testlink.status;
 
 import com.github.pixelstuermer.junit2testlink.data.definition.ExecutionStatus;
+import com.github.pixelstuermer.junit2testlink.testsupport.annotation.Report2TestLink;
 
 /**
  * Interface for resolving the {@link ExecutionStatus} of a test.
  * This is the status representing if a test passed, failed or if it was aborted or disabled.
+ * It can be implemented and passed to the {@link Report2TestLink} annotation to customize the automated reporting.
+ * This is mainly interesting for the handling of aborted and skipped tests.
  *
  * @since 1.0.0
  */
