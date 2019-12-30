@@ -60,6 +60,14 @@ Tbd.
 
 ## Credits And Related
 
+Since it was a bit tiring to figure out how the TestLink REST API works (and which endpoints to request), here are some interesting links which resulted from my research.
+Please note that not all of the API descriptions are up to date.
+
+* [GitHub "testlink-tests" repository](https://github.com/TestLinkOpenSourceTRMS/testlink-tests/tree/master/rest-api)
+* [GitHub "testlink-java-api" repository](https://github.com/kinow/testlink-java-api)
+* [MantisBT "REST API" issue](http://mantis.testlink.org/view.php?id=5661)
+* [Google Docs "Using REST Client Firefox Addon" document](https://docs.google.com/document/d/12jp8pVrgCFdH90S2FLvz6iXfePLZbr11Tv1PqYAXwiA/edit)
+
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/).
 
 ## License
