@@ -18,6 +18,8 @@ public class TestProperties {
 
     private boolean testLinkReportingEnabled;
 
+    private String testCaseId;
+
     private String testClassName;
 
     private String testMethodName;

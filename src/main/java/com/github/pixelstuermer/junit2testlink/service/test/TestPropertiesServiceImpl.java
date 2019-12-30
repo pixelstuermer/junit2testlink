@@ -28,6 +28,7 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
     public TestProperties getTestProperties(ExtensionContext context) {
         final TestProperties properties = TestProperties.builder()
                                                         .testLinkReportingEnabled(isTestLinkReportingEnabled(context))
+                                                        .testCaseId(getTestCaseId(context))
                                                         .testClassName(getTestClassName(context))
                                                         .testMethodName(getTestMethodName(context))
                                                         .testLinkNotesService(getTestLinkNotesService(context))
@@ -40,6 +41,16 @@ public class TestPropertiesServiceImpl implements TestPropertiesService {
 
     private boolean isTestLinkReportingEnabled(ExtensionContext context) {
         return getTestMethod(context).isAnnotationPresent(TEST_LINK_ANNOTATION);
+    }
+
+    private String getTestCaseId(ExtensionContext context) {
+        if (isTestLinkReportingEnabled(context)) {
+            final TestLink testLinkAnnotation = getAnnotation(context, TEST_LINK_ANNOTATION);
+            return testLinkAnnotation.testCaseId();
+        }
+
+        LOG.warn("Test case ID not present");
+        throw new NoTestPropertiesException("Test case ID not present");
     }
 
     private String getTestClassName(ExtensionContext context) {
