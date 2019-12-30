@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * Implementation of the {@link TestLinkNotesService} interface to define the TestLink notes info text.
+ * Default implementation of the {@link TestLinkNotesService} interface to define the TestLink notes info text.
  * Is concatenates the {@link TestProperties} of a test method and uses them as the TestLink notes text.
  *
  * @since 1.0.0

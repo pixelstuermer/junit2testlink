@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import java.util.Optional;
 
 /**
- * Implementation of the {@link TestLinkNotesService} interface to define the TestLink notes info text.
+ * Alternative implementation of the {@link TestLinkNotesService} interface to define the TestLink notes info text.
  * It extracts the {@link DisplayName} of a test method and uses it as the TestLink notes text.
  *
  * @since 1.0.0

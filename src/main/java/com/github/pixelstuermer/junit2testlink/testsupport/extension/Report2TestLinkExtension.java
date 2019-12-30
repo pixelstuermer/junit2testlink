@@ -5,6 +5,7 @@ import com.github.pixelstuermer.junit2testlink.error.ServiceInstantiationExcepti
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesService;
 import com.github.pixelstuermer.junit2testlink.service.test.TestPropertiesServiceImpl;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 /**
  * Implementation of the JUnit {@link TestWatcher} interface to collect and report a test result to TestLink.
- * The implemented methods are called after a test method was executed, skipped, etc.
+ * The implemented methods are called after a test method was executed.
  *
  * @since 1.0.0
  */
@@ -30,6 +31,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testSuccessful(ExtensionContext context) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
         final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
+        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} passed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -42,6 +44,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testFailed(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
         final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
+        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} failed and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -57,6 +60,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testAborted(ExtensionContext context, Throwable cause) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
         final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
+        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} aborted and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -72,6 +76,7 @@ public class Report2TestLinkExtension implements TestWatcher {
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         final TestProperties testProperties = testPropertiesService.getTestProperties(context);
         final TestLinkNotesService testLinkNotesService = getTestLinkNotesService(testProperties);
+        final TestLinkStatusService testLinkStatusService = getTestLinkStatusService(testProperties);
 
         LOG.trace("Test {} of class {} disabled and enabled for TestLink reporting {}",
                 testProperties.getTestMethodName(), testProperties.getTestClassName(),
@@ -87,9 +92,22 @@ public class Report2TestLinkExtension implements TestWatcher {
             return testLinkNotesService.getConstructor()
                                        .newInstance();
         } catch (Exception e) {
-            LOG.warn("Cannot instantiate TestLinkNotesService object of type {}", testLinkNotesService.getSimpleName());
-            throw new ServiceInstantiationException("Cannot instantiate TestLinkNotesService object of type " +
+            LOG.warn("Cannot instantiate TestLinkNotesService of type {}", testLinkNotesService.getSimpleName());
+            throw new ServiceInstantiationException("Cannot instantiate TestLinkNotesService of type " +
                     testLinkNotesService.getSimpleName());
+        }
+    }
+
+    private TestLinkStatusService getTestLinkStatusService(TestProperties testProperties) {
+        final Class<? extends TestLinkStatusService> testLinkStatusService = testProperties.getTestLinkStatusService();
+
+        try {
+            return testLinkStatusService.getConstructor()
+                                        .newInstance();
+        } catch (Exception e) {
+            LOG.warn("Cannot instantiate TestLinkStatusService of type {}", testLinkStatusService.getSimpleName());
+            throw new ServiceInstantiationException("Cannot instantiate TestLinkStatusService of type " +
+                    testLinkStatusService.getSimpleName());
         }
     }
 

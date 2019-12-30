@@ -2,6 +2,8 @@ package com.github.pixelstuermer.junit2testlink.testsupport.annotation;
 
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesServiceDefaultImpl;
+import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusServiceDefaultImpl;
 import com.github.pixelstuermer.junit2testlink.testsupport.extension.Report2TestLinkExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,5 +30,13 @@ public @interface Report2TestLink {
      * @return The service to generate the notes for TestLink ({@link TestLinkNotesServiceDefaultImpl} by default)
      */
     Class<? extends TestLinkNotesService> notesService() default TestLinkNotesServiceDefaultImpl.class;
+
+    /**
+     * Represents the {@link TestLinkStatusService} implementation to use for resolving the execution status of a test.
+     * This is the status which defines if a test passed or failed or if it was aborted or disabled.
+     *
+     * @return The service to resolve the execution status with ({@link TestLinkStatusServiceDefaultImpl} by default)
+     */
+    Class<? extends TestLinkStatusService> statusService() default TestLinkStatusServiceDefaultImpl.class;
 
 }

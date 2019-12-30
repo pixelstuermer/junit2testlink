@@ -1,6 +1,7 @@
 package com.github.pixelstuermer.junit2testlink.data.model;
 
 import com.github.pixelstuermer.junit2testlink.service.testlink.notes.TestLinkNotesService;
+import com.github.pixelstuermer.junit2testlink.service.testlink.status.TestLinkStatusService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -22,5 +23,7 @@ public class TestProperties {
     private String testMethodName;
 
     private Class<? extends TestLinkNotesService> testLinkNotesService;
+
+    private Class<? extends TestLinkStatusService> testLinkStatusService;
 
 }
