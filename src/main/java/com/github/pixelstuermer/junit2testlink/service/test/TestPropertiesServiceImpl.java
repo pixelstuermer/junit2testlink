@@ -22,6 +22,8 @@ import java.util.Optional;
 @Slf4j
 public class TestPropertiesServiceImpl implements TestPropertiesService {
 
+    // TODO Refactor
+
     private static final Class<TestLink> TEST_LINK_ANNOTATION = TestLink.class;
     private static final Class<Report2TestLink> REPORT_TO_TEST_LINK_ANNOTATION = Report2TestLink.class;
 
