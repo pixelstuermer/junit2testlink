@@ -60,7 +60,7 @@ Tbd.
 
 ## Credits And Related
 
-Since it was a bit tiring to figure out how the TestLink REST API works (and which endpoints to request), here are some interesting links which resulted from my research.
+Since it was a bit tiring to figure out how the TestLink REST API works (and which endpoints to request that currently still exist), here are some interesting links which resulted from my research.
 Please note that not all of the API descriptions are up to date.
 
 * [GitHub "testlink-tests" repository](https://github.com/TestLinkOpenSourceTRMS/testlink-tests/tree/master/rest-api)
