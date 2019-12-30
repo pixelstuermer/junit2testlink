@@ -29,7 +29,9 @@ import java.net.URI;
 @Slf4j
 public class TestLinkApiServiceRestImpl implements TestLinkApiService {
 
-    private static final String BASIC_AUTH_PREFIX = "Basic";
+    private static final String BASIC_AUTH_PREFIX = "Basic ";
+    private static final char BASIC_AUTH_USERNAME_PASSWORD_SEPARATOR = ':';
+
     private static final String TEST_LINK_REST_API_PATH = "/lib/api/rest/v1/executions";
 
     private ObjectMapper objectMapper;
@@ -61,10 +63,11 @@ public class TestLinkApiServiceRestImpl implements TestLinkApiService {
     }
 
     private MultiValueMap<String, String> getHttpHeaders(TestLinkConfigService testLinkConfigService) {
-        final String apiKeyBase64Encoded = encodeToBase64(testLinkConfigService.getTestLinkApiKey());
+        final String apiKey = testLinkConfigService.getTestLinkApiKey() + BASIC_AUTH_USERNAME_PASSWORD_SEPARATOR;
+        final String apiKeyBase64Encoded = encodeToBase64(apiKey);
 
         final LinkedMultiValueMap<String, String> httpHeaders = new LinkedMultiValueMap<>();
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, BASIC_AUTH_PREFIX + " " + apiKeyBase64Encoded);
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, BASIC_AUTH_PREFIX + apiKeyBase64Encoded);
 
         LOG.trace("Created HTTP headers with {} entries", httpHeaders.size());
         return httpHeaders;
