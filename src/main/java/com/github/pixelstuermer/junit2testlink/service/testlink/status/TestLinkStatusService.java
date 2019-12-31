@@ -8,6 +8,7 @@ import com.github.pixelstuermer.junit2testlink.testsupport.annotation.Report2Tes
  * This is the status which represents if a test passed, failed or if it was aborted or disabled.
  * It can be implemented and passed to the {@link Report2TestLink} annotation to customize the automated reporting.
  * This is mainly interesting for the handling of aborted and skipped tests (and for their representation in TestLink).
+ * Because of that, the interface already implements the default behavior for passed and failed tests.
  *
  * @since 1.0.0
  */
@@ -18,14 +19,18 @@ public interface TestLinkStatusService {
      *
      * @return The execution status of a successful test
      */
-    ExecutionStatus getTestSuccessfulExecutionStatus();
+    default ExecutionStatus getTestSuccessfulExecutionStatus() {
+        return ExecutionStatus.PASSED;
+    }
 
     /**
      * Returns the {@link ExecutionStatus} to send to TestLink when a test failed.
      *
      * @return The execution status of a failed test
      */
-    ExecutionStatus getTestFailedExecutionStatus();
+    default ExecutionStatus getTestFailedExecutionStatus() {
+        return ExecutionStatus.FAILED;
+    }
 
     /**
      * Returns the {@link ExecutionStatus} to send to TestLink when a test was aborted.
