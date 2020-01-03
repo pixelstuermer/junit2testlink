@@ -31,32 +31,32 @@ public class TestLinkConfigServicePropertiesFileImpl implements TestLinkConfigSe
 
     @Override
     public boolean isTestLinkReportingEnabled() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_ENABLED, Boolean.class, true);
+        return Boolean.parseBoolean(readPropertyFromFile(TestLinkConfig.TEST_LINK_ENABLED, true));
     }
 
     @Override
     public URI getTestLinkBaseUri() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_BASE_URI, URI.class, true);
+        return URI.create(readPropertyFromFile(TestLinkConfig.TEST_LINK_BASE_URI, true));
     }
 
     @Override
     public String getTestLinkApiKey() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_API_KEY, String.class, false);
+        return readPropertyFromFile(TestLinkConfig.TEST_LINK_API_KEY, false);
     }
 
     @Override
     public int getTestLinkPlatformId() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_PLATFORM_ID, Integer.class, true);
+        return Integer.parseInt(readPropertyFromFile(TestLinkConfig.TEST_LINK_PLATFORM_ID, true));
     }
 
     @Override
     public int getTestLinkPlanId() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_PLAN_ID, Integer.class, true);
+        return Integer.parseInt(readPropertyFromFile(TestLinkConfig.TEST_LINK_PLAN_ID, true));
     }
 
     @Override
     public int getTestLinkBuildId() {
-        return readPropertyFromFile(TestLinkConfig.TEST_LINK_BUILD_ID, Integer.class, true);
+        return Integer.parseInt(readPropertyFromFile(TestLinkConfig.TEST_LINK_BUILD_ID, true));
     }
 
     private Properties getPropertiesFile() {
@@ -89,7 +89,7 @@ public class TestLinkConfigServicePropertiesFileImpl implements TestLinkConfigSe
                    .toURI();
     }
 
-    private <T> T readPropertyFromFile(TestLinkConfig testLinkConfig, Class<T> type, boolean loggingEnabled) {
+    private String readPropertyFromFile(TestLinkConfig testLinkConfig, boolean loggingEnabled) {
         final String property = properties.getProperty(testLinkConfig.getPropertiesFileKey());
 
         if (loggingEnabled) {
@@ -98,7 +98,7 @@ public class TestLinkConfigServicePropertiesFileImpl implements TestLinkConfigSe
             LOG.trace("Read property {} from file", testLinkConfig.getPropertiesFileKey());
         }
 
-        return type.cast(property);
+        return property;
     }
 
 }
