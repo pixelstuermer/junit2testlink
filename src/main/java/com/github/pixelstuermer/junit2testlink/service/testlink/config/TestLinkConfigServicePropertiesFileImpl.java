@@ -66,7 +66,7 @@ public class TestLinkConfigServicePropertiesFileImpl implements TestLinkConfigSe
 
             LOG.trace("Successfully loaded properties file {} from classpath", PROPERTIES_FILE_NAME);
             return properties;
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | NullPointerException e) {
             LOG.warn("Cannot read from file {} in classpath", PROPERTIES_FILE_NAME);
             throw new NoTestPropertiesException("Cannot read from file " + PROPERTIES_FILE_NAME + " in classpath");
         }
@@ -81,8 +81,10 @@ public class TestLinkConfigServicePropertiesFileImpl implements TestLinkConfigSe
                     .toFile();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private URI getFileUri() throws URISyntaxException {
         return this.getClass()
+                   .getClassLoader()
                    .getResource(PROPERTIES_FILE_NAME)
                    .toURI();
     }
