@@ -11,6 +11,7 @@ import java.net.URI;
  * Like this, it is suited for automated test reporting, e.g. while using a build server within a CI pipeline.
  * The tests are therefore only reported if the required environment variables are set.
  * If they are not set, e.g. when only executing the tests within an IDE, the reporting is disabled.
+ * See here for the naming convention of the properties: {@link TestLinkConfig}.
  *
  * @since 1.0.0
  */

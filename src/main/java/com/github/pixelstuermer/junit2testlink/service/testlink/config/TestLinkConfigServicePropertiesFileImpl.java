@@ -14,6 +14,7 @@ import java.util.Properties;
  * Alternative implementation of the {@link TestLinkConfigService} interface to provide the TestLink properties.
  * This implementation reads the properties from the "report2testlink.properties" file.
  * This file must therefore be present in the classpath.
+ * See here for the naming convention of the properties: {@link TestLinkConfig}.
  *
  * @since 1.0.0
  */
