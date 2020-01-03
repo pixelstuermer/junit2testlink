@@ -54,6 +54,7 @@
         <!-- Dependency Versions -->
         <spring-web.version>5.2.2.RELEASE</spring-web.version>
         <jackson.version>2.10.1</jackson.version>
+        <jackson-yaml.version>2.10.1</jackson-yaml.version>
         <lombok.version>1.18.10</lombok.version>
         <slf4j.version>1.7.29</slf4j.version>
         <junit.version>5.5.2</junit.version>
@@ -75,6 +76,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jackson-yaml.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
