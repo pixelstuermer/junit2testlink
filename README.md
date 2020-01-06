@@ -40,7 +40,12 @@ Tbd.
 
 ## Requirements
 
-Tbd.
+The library is written and compiled with `Java 11`.
+It is intended to be used in combination with `JUnit 5 (Jupiter)`.
+The models and API calls are furthermore developed against `TestLink 1.9.19`.
+
+The test automation feature must be enabled to report test results to TestLink.
+The library additionally requires an API key to authenticate against TestLink.
 
 ## Features
 
@@ -60,7 +65,7 @@ Tbd.
 
 ## Credits And Related
 
-Since it was a bit tiring to figure out how the TestLink REST API works (and which endpoints to request that currently still exist), here are some interesting links which resulted from my research.
+Since it is a bit tiring to figure out how the TestLink REST API works (and which endpoints to request that currently still exist), here are some interesting links which resulted from the research.
 Please note that not all of the API descriptions are up to date.
 
 * [GitHub "testlink-tests" repository](https://github.com/TestLinkOpenSourceTRMS/testlink-tests/tree/master/rest-api)
