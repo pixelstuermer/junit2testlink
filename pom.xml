@@ -52,7 +52,7 @@
         <project.reporting.outputEncoding>${file.encoding}</project.reporting.outputEncoding>
 
         <!-- Dependency Versions -->
-        <jackson.version>2.10.1</jackson.version>
+        <jackson.version>2.10.5.1</jackson.version>
         <lombok.version>1.18.10</lombok.version>
 
         <!-- Plugin Versions -->
